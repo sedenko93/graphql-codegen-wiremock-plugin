@@ -1,0 +1,9 @@
+# Write your query or mutation here
+query getLanguage($code: ID!) {
+  language(code: $code) {
+  	code
+    name
+    native
+    rtl
+  }
+}

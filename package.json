@@ -1,5 +1,5 @@
 {
-  "name": "graphql-wiremock-stub-generator",
+  "name": "graphql-codegen-wiremock",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "git@github.com:sedenko93/graphql-wiremock-stub-generator.git",
