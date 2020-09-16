@@ -11,11 +11,11 @@ export interface ProxyConfig {
   executor: string
   schema: string
   method: string
-  headers: KeyValueObject
 }
 
 export interface WiremockStubGeneratorConfig {
   proxy: ProxyConfig
+  proxyHeaders: KeyValueObject
   wiremock: WiremockConfig
   operation: GraphQLOperationConfig
 }

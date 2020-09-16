@@ -5,9 +5,12 @@ import { WiremockStubGeneratorConfig } from './config';
 export const getResponse = async (
   query: DocumentNode,
   config: WiremockStubGeneratorConfig
-) => {
-  return getClient(config.proxy.schema).query({
+) => {  
+  const client = await getClient(config);
+  const response = await client.query({
     query,
     variables: config.operation.variables
   });
+
+  return { data: response.data };
 };
