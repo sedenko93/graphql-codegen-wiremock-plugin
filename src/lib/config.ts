@@ -8,9 +8,7 @@ export interface KeyValueObject {
 }
 
 export interface ProxyConfig {
-  executor: string
   schema: string
-  method: string
 }
 
 export interface WiremockStubGeneratorConfig {

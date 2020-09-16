@@ -49,7 +49,9 @@ export const getBodyFileName = (
   const keyValString = operation.variableDefinitions
     ?.map(
       ({ variable }) =>
-        `${variable.name.value}-${config.variables[variable.name.value]}`
+        `${variable.name.value}${
+          config.variables && config.variables[variable.name.value] ? `-${config.variables[variable.name.value]}` : ""
+        }`
     )
     .join("-");
   return `${config.name}${keyValString ? `-${keyValString}` : ""}.json`;
@@ -60,11 +62,19 @@ export const getBodyPatterns = (
   variables: { [key: string]: any }
 ) => {
   return operation.variableDefinitions
-    ?.map(({ variable }) => ({
-      matchesJsonPath: `$.variables[?(@.${variable.name.value} == '${
-        variables[variable.name.value]
-      }')]`,
-    }))
+    ?.map(({ variable }) => {
+      if (!variables || variables[variable.name.value] === undefined) {
+        throw new Error(
+          `Could not provide query variable ${variable.name.value}, ${variable.name.value} is not given`
+        );
+      }
+
+      return {
+        matchesJsonPath: `$.variables[?(@.${variable.name.value} == '${
+          variables[variable.name.value]
+        }')]`,
+      };
+    })
     .concat({
       matchesJsonPath: `$[?(@.operationName == '${operation?.name?.value}')]`,
     });

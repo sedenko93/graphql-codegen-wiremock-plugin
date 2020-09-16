@@ -1,4 +1,4 @@
-import { Types, PluginFunction } from "@graphql-codegen/plugin-helpers";
+import { Types, PluginFunction, PluginValidateFn } from "@graphql-codegen/plugin-helpers";
 import fs from "fs-extra";
 import { WiremockStubGeneratorConfig } from "./config";
 import { getDocumentByName } from "./helpers";
@@ -27,4 +27,18 @@ const plugin: PluginFunction<WiremockStubGeneratorConfig> = async (
   return JSON.stringify(requestMapping);
 };
 
-export { plugin };
+const validate: PluginValidateFn = (_, __, config: WiremockStubGeneratorConfig) => {
+  if (!config.wiremock || !config.wiremock.mocksDirectory) {
+    throw new Error(`invalid configuration: mocksDirectory is not specified`);
+  }
+
+  if (!config.operation || !config.operation.name) {
+    throw new Error(`invalid configuration: no operation is specified`);
+  }
+
+  if (!config.proxy || !config.proxy.schema) {
+    console.trace(`configuration warning: could not generate response as no proxy configuration is given.`);
+  }
+}
+
+export { plugin, validate };
