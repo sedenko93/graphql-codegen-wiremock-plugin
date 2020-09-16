@@ -4,7 +4,11 @@ query getContinents {
   	code
     name
     countries {
-      emoji
+      ...country
     }
   }
+}
+
+fragment country on Country {
+  code
 }
