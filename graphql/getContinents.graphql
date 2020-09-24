@@ -1,0 +1,14 @@
+# Write your query or mutation here
+query getContinents {
+  continents {
+  	code
+    name
+    countries {
+      ...country
+    }
+  }
+}
+
+fragment country on Country {
+  code
+}

@@ -1,0 +1,11 @@
+# Write your query or mutation here
+query getCountry($code: ID!) {
+  country(code: $code) {
+  	code
+    name
+    languages {
+      native
+    }
+    currency
+  }
+}

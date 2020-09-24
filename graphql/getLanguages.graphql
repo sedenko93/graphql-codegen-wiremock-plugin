@@ -1,0 +1,9 @@
+# Write your query or mutation here
+query getLanguages {
+  languages {
+  	code
+    name
+    native
+    rtl
+  }
+}

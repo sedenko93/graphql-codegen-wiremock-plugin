@@ -1,0 +1,57 @@
+documents: "graphql/**.graphql"
+schema: "https://countries.trevorblades.com"
+overwrite: true
+config:
+  proxy:
+    executor: "Apollo"
+    schema: "https://countries.trevorblades.com"
+  wiremock:
+    mocksDirectory: "mock/__files"
+    request:
+      method: "POST"
+      urlPattern: "/"
+generates:
+  mock/mappings/get-europe.json:
+    config:
+      operation:
+        name: 'getContinent'
+        variables:
+          code: "EU"
+    plugins:
+      - dist/index.js
+  mock/mappings/get-continents.json:
+    config:
+      operation:
+        name: 'getContinents'
+    plugins:
+      - dist/index.js
+  mock/mappings/get-countries.json:
+    config:
+      operation:
+        name: 'getCountries'
+    plugins:
+      - dist/index.js
+  mock/mappings/get-country.json:
+    config:
+      operation:
+        name: 'getCountry'
+        variables:
+          code: "NL"
+    plugins:
+      - dist/index.js
+  mock/mappings/get-language.json:
+    config:
+      operation:
+        name: 'getLanguage'
+        variables:
+          code: "NL"
+    plugins:
+      - dist/index.js
+  mock/mappings/get-languages.json:
+    config:
+      operation:
+        name: 'getLanguages'
+    plugins:
+      - dist/index.js
+
+
