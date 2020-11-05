@@ -1,1 +1,1 @@
-{"data":{"country":{"__typename":"Country","code":"NL","name":"Netherlands","languages":[{"__typename":"Language","native":"Nederlands"}],"currency":"EUR"}}}
+{"data":{"country":{"code":"NL","name":"Netherlands","languages":[{"native":"Nederlands","__typename":"Language"}],"currency":"EUR","__typename":"Country"}}}

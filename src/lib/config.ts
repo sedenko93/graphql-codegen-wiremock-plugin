@@ -7,13 +7,14 @@ export interface KeyValueObject {
   [key: string]: any
 }
 
-export interface ProxyConfig {
-  schema: string
+export interface Request {
+  url: string
+  headers: KeyValueObject
 }
 
 export interface WiremockStubGeneratorConfig {
-  proxy: ProxyConfig
-  proxyHeaders: KeyValueObject
+  schema: string
+  requestHeaders: KeyValueObject
   wiremock: WiremockConfig
   operation: GraphQLOperationConfig
 }

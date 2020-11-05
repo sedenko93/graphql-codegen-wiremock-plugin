@@ -3,7 +3,7 @@ import fs from "fs-extra";
 import { WiremockStubGeneratorConfig } from "./config";
 import { getDocumentByName } from "./helpers";
 import { getRequestMapping } from "./wiremock";
-import { getResponse } from "./proxy";
+import { getResponse } from "./operation";
 
 const plugin: PluginFunction<WiremockStubGeneratorConfig> = async (
   _,
@@ -16,7 +16,7 @@ const plugin: PluginFunction<WiremockStubGeneratorConfig> = async (
 
   const requestMapping = getRequestMapping(config, document);
 
-  if (config.proxy) {
+  if (config.schema) {
     const response = JSON.stringify(await getResponse(document, config));
     await fs.outputFile(
       `${config.wiremock.mocksDirectory}/${requestMapping.response.bodyFileName}`,
@@ -36,8 +36,8 @@ const validate: PluginValidateFn = (_, __, config: WiremockStubGeneratorConfig) 
     throw new Error(`invalid configuration: no operation is specified`);
   }
 
-  if (!config.proxy || !config.proxy.schema) {
-    console.trace(`configuration warning: could not generate response as no proxy configuration is given.`);
+  if (!config.schema) {
+    console.trace(`configuration warning: could not generate response as no request configuration is given.`);
   }
 }
 

@@ -2,9 +2,7 @@ documents: "graphql/**.graphql"
 schema: "https://countries.trevorblades.com"
 overwrite: true
 config:
-  proxy:
-    executor: "Apollo"
-    schema: "https://countries.trevorblades.com"
+  schema: "https://countries.trevorblades.com"
   wiremock:
     mocksDirectory: "mock/__files"
     request:

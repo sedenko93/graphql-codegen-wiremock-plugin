@@ -6,7 +6,6 @@
   "author": "Boyd Rehorst <boyd.rehorst@ziggo.nl>",
   "license": "MIT",
   "dependencies": {
-    "@apollo/client": "^3.2.0",
     "fs-extra": "^9.0.1",
     "graphql": "^15.3.0",
     "graphql-tools": "^6.2.2",
