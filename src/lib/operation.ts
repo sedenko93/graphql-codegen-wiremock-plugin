@@ -23,7 +23,7 @@ const TYPENAME_FIELD: FieldNode = {
 const getExecutor = (config: WiremockStubGeneratorConfig) => {
   return async ({ document, variables }: any) => {
     const query = print(document);
-    const fetchResult = await fetch(config.schema, {
+    const fetchResult = await fetch(config.requestUrl, {
       method: "post",
       headers: {
         "Content-Type": "application/json",

@@ -7,13 +7,8 @@ export interface KeyValueObject {
   [key: string]: any
 }
 
-export interface Request {
-  url: string
-  headers: KeyValueObject
-}
-
 export interface WiremockStubGeneratorConfig {
-  schema: string
+  requestUrl: string
   requestHeaders: KeyValueObject
   wiremock: WiremockConfig
   operation: GraphQLOperationConfig

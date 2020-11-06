@@ -16,7 +16,7 @@ const plugin: PluginFunction<WiremockStubGeneratorConfig> = async (
 
   const requestMapping = getRequestMapping(config, document);
 
-  if (config.schema) {
+  if (config.requestUrl) {
     const response = JSON.stringify(await getResponse(document, config));
     await fs.outputFile(
       `${config.wiremock.mocksDirectory}/${requestMapping.response.bodyFileName}`,
@@ -28,15 +28,15 @@ const plugin: PluginFunction<WiremockStubGeneratorConfig> = async (
 };
 
 const validate: PluginValidateFn = (_, __, config: WiremockStubGeneratorConfig) => {
-  if (!config.wiremock || !config.wiremock.mocksDirectory) {
+  if (!config?.wiremock?.mocksDirectory) {
     throw new Error(`invalid configuration: mocksDirectory is not specified`);
   }
 
-  if (!config.operation || !config.operation.name) {
+  if (!config?.operation?.name) {
     throw new Error(`invalid configuration: no operation is specified`);
   }
 
-  if (!config.schema) {
+  if (!config.requestUrl) {
     console.trace(`configuration warning: could not generate response as no request configuration is given.`);
   }
 }

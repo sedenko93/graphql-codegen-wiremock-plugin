@@ -1,15 +1,15 @@
-documents: "graphql/**.graphql"
+documents: "example/graphql/**.graphql"
 schema: "https://countries.trevorblades.com"
 overwrite: true
 config:
-  schema: "https://countries.trevorblades.com"
+  requestUrl: "https://countries.trevorblades.com"
   wiremock:
-    mocksDirectory: "mock/__files"
+    mocksDirectory: "example/mock/__files"
     request:
       method: "POST"
       urlPattern: "/"
 generates:
-  mock/mappings/get-europe.json:
+  example/mock/mappings/get-europe.json:
     config:
       operation:
         name: 'getContinent'
@@ -17,19 +17,19 @@ generates:
           code: "EU"
     plugins:
       - dist/index.js
-  mock/mappings/get-continents.json:
+  example/mock/mappings/get-continents.json:
     config:
       operation:
         name: 'getContinents'
     plugins:
       - dist/index.js
-  mock/mappings/get-countries.json:
+  example/mock/mappings/get-countries.json:
     config:
       operation:
         name: 'getCountries'
     plugins:
       - dist/index.js
-  mock/mappings/get-country.json:
+  example/mock/mappings/get-country.json:
     config:
       operation:
         name: 'getCountry'
@@ -37,7 +37,7 @@ generates:
           code: "NL"
     plugins:
       - dist/index.js
-  mock/mappings/get-language.json:
+  example/mock/mappings/get-language.json:
     config:
       operation:
         name: 'getLanguage'
@@ -45,7 +45,7 @@ generates:
           code: "NL"
     plugins:
       - dist/index.js
-  mock/mappings/get-languages.json:
+  example/mock/mappings/get-languages.json:
     config:
       operation:
         name: 'getLanguages'
