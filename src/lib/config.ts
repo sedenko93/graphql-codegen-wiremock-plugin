@@ -12,10 +12,11 @@ export interface WiremockStubGeneratorConfig {
   requestHeaders: KeyValueObject
   wiremock: WiremockConfig
   operation: GraphQLOperationConfig
+  outputPath: string
 }
 
 export interface WiremockConfig {
-  mocksDirectory: string
+  __filesDirectory: string
   request: {
     method?: string
     urlPattern?: string

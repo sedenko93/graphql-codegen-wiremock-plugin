@@ -4,10 +4,12 @@ overwrite: true
 config:
   requestUrl: "https://countries.trevorblades.com"
   wiremock:
-    mocksDirectory: "example/mock/__files"
+    __filesDirectory: "example/mock/__files"
     request:
       method: "POST"
-      urlPattern: "/"
+      urlPattern: "/test/"
+    response:
+      status: 200
 generates:
   example/mock/mappings/get-europe.json:
     config:
@@ -15,18 +17,25 @@ generates:
         name: 'getContinent'
         variables:
           code: "EU"
+      outputPath: /test/
     plugins:
       - dist/index.js
   example/mock/mappings/get-continents.json:
     config:
       operation:
         name: 'getContinents'
+        variables:
+          filter:
+            code:
+              eq: "EU"
+      outputPath: /test/
     plugins:
       - dist/index.js
   example/mock/mappings/get-countries.json:
     config:
       operation:
         name: 'getCountries'
+      outputPath: /test/
     plugins:
       - dist/index.js
   example/mock/mappings/get-country.json:
@@ -35,6 +44,7 @@ generates:
         name: 'getCountry'
         variables:
           code: "NL"
+      outputPath: /test/
     plugins:
       - dist/index.js
   example/mock/mappings/get-language.json:
@@ -43,12 +53,14 @@ generates:
         name: 'getLanguage'
         variables:
           code: "NL"
+      outputPath: /test/
     plugins:
       - dist/index.js
   example/mock/mappings/get-languages.json:
     config:
       operation:
         name: 'getLanguages'
+      outputPath: /test/
     plugins:
       - dist/index.js
 

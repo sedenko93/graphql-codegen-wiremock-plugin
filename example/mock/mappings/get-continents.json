@@ -1,1 +1,1 @@
-{"request":{"method":"POST","urlPattern":"/","bodyPatterns":[{"matchesJsonPath":"$[?(@.operationName == 'getContinents')]"}]},"response":{"bodyFileName":"getContinents.json"}}
+{"request":{"method":"POST","urlPattern":"/test/","bodyPatterns":[{"matchesJsonPath":{"expression":"$.variables","equalToJson":"{\"code\":{\"eq\":\"EU\"}}"}},{"matchesJsonPath":"$[?(@.operationName == 'getContinents')]"}]},"response":{"status":200,"bodyFileName":"/test/getContinents-filter-1605883660557.json"}}

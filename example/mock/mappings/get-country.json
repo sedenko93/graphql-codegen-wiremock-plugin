@@ -1,1 +1,1 @@
-{"request":{"method":"POST","urlPattern":"/","bodyPatterns":[{"matchesJsonPath":"$.variables[?(@.code == 'NL')]"},{"matchesJsonPath":"$[?(@.operationName == 'getCountry')]"}]},"response":{"bodyFileName":"getCountry-code-NL.json"}}
+{"request":{"method":"POST","urlPattern":"/test/","bodyPatterns":[{"matchesJsonPath":{"expression":"$.variables","equalToJson":"\"NL\""}},{"matchesJsonPath":"$[?(@.operationName == 'getCountry')]"}]},"response":{"status":200,"bodyFileName":"/test/getCountry-code-NL.json"}}

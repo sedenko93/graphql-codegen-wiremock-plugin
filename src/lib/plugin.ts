@@ -19,7 +19,7 @@ const plugin: PluginFunction<WiremockStubGeneratorConfig> = async (
   if (config.requestUrl) {
     const response = JSON.stringify(await getResponse(document, config));
     await fs.outputFile(
-      `${config.wiremock.mocksDirectory}/${requestMapping.response.bodyFileName}`,
+      `${config.wiremock.__filesDirectory}/${requestMapping.response.bodyFileName}`,
       response
     );
   }
@@ -28,7 +28,7 @@ const plugin: PluginFunction<WiremockStubGeneratorConfig> = async (
 };
 
 const validate: PluginValidateFn = (_, __, config: WiremockStubGeneratorConfig) => {
-  if (!config?.wiremock?.mocksDirectory) {
+  if (!config?.wiremock?.__filesDirectory) {
     throw new Error(`invalid configuration: mocksDirectory is not specified`);
   }
 

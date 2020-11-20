@@ -1,6 +1,6 @@
 # Write your query or mutation here
-query getContinents {
-  continents {
+query getContinents($filter: ContinentFilterInput) {
+  continents(filter: $filter) {
   	code
     name
     countries {

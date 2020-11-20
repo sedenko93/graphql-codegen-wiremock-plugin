@@ -33,9 +33,10 @@ export const createResponseMapping = (
   const operation = <OperationDefinitionNode>(
     document.definitions.find(isOperationDefinition)
   );
-  const bodyFileName =
+  const bodyFileName = `${config.outputPath || ""}${
     config?.wiremock?.response?.bodyFileName ||
-    getBodyFileName(operation, config.operation);
+    getBodyFileName(operation, config.operation)
+  }`;
   return {
     ...config.wiremock.response,
     bodyFileName,
@@ -47,12 +48,18 @@ export const getBodyFileName = (
   config: GraphQLOperationConfig
 ) => {
   const keyValString = operation.variableDefinitions
-    ?.map(
-      ({ variable }) =>
-        `${variable.name.value}${
-          config.variables && config.variables[variable.name.value] ? `-${config.variables[variable.name.value]}` : ""
-        }`
-    )
+    ?.map(({ variable }) => {
+      const postfix =
+        typeof config.variables[variable.name.value] === "object"
+          ? Date.now()
+          : config.variables[variable.name.value];
+
+      return `${variable.name.value}${
+        config.variables && config.variables[variable.name.value]
+          ? `-${postfix}`
+          : ""
+      }`;
+    })
     .join("-");
   return `${config.name}${keyValString ? `-${keyValString}` : ""}.json`;
 };
@@ -62,7 +69,7 @@ export const getBodyPatterns = (
   variables: { [key: string]: any }
 ) => {
   return operation.variableDefinitions
-    ?.map(({ variable }) => {
+    ?.map(({ variable }): any => {
       if (!variables || variables[variable.name.value] === undefined) {
         throw new Error(
           `Could not provide query variable ${variable.name.value}, ${variable.name.value} is not given`
@@ -70,9 +77,10 @@ export const getBodyPatterns = (
       }
 
       return {
-        matchesJsonPath: `$.variables[?(@.${variable.name.value} == '${
-          variables[variable.name.value]
-        }')]`,
+        matchesJsonPath: {
+          expression: "$.variables",
+          equalToJson: JSON.stringify(variables[variable.name.value]),
+        },
       };
     })
     .concat({
