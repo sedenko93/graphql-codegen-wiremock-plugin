@@ -7,16 +7,18 @@ export interface KeyValueObject {
   [key: string]: any
 }
 
-export interface WiremockStubGeneratorConfig {
-  requestUrl: string
-  requestHeaders: KeyValueObject
-  wiremock: WiremockConfig
-  operation: GraphQLOperationConfig
+export interface Request {
   outputPath: string
+  url: string
+  headers: KeyValueObject   
+}
+export interface WiremockPluginConfig {  
+  request: Request  
+  wiremock: WiremockConfig
+  operation: GraphQLOperationConfig  
 }
 
-export interface WiremockConfig {
-  __filesDirectory: string
+export interface WiremockConfig {  
   request: {
     method?: string
     urlPattern?: string
@@ -26,5 +28,13 @@ export interface WiremockConfig {
     status: number
     bodyFileName: string
     body: string
+  }
+}
+
+export interface WiremockBodyPattern {
+  matchesJsonPath: {
+    expression: string
+    equalTo?: string
+    equalToJson?: string
   }
 }
