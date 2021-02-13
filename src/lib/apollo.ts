@@ -2,9 +2,7 @@ import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache, NormalizedCacheObject } from "apollo-cache-inmemory";
 import fetch from "node-fetch";
-import { print } from "graphql";
-import gql from "graphql-tag";
-import { Types } from "@graphql-codegen/plugin-helpers";
+import { DocumentNode } from "graphql";
 import { WiremockPluginConfig } from "./config";
 import { getOperationAST } from "graphql";
 
@@ -36,15 +34,15 @@ export const getClient = (
 };
 
 export const executeOperation = async (
-  document: Types.DocumentFile,
+  document: DocumentNode,
   config: WiremockPluginConfig
 ): Promise<{ data: any; errors: any }> => {
   const client = await getClient(config);
-  const operation = getOperationAST(document.document, config.operation.name);
+  const operation = getOperationAST(document, config.operation.name);
 
   if (operation.operation === "mutation") {
     const { data, errors } = await client.mutate({
-      mutation: gql(print(operation)),
+      mutation: document,
       variables: config.operation.variables,
     });
 
@@ -52,7 +50,7 @@ export const executeOperation = async (
   }
 
   const { data, errors } = await client.query({
-    query: document.document,
+    query: document,
     variables: config.operation.variables,
     fetchPolicy: "no-cache",
   });

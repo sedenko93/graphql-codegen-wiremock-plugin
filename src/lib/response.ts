@@ -1,11 +1,11 @@
 import fs from "fs-extra";
-import { Types } from "@graphql-codegen/plugin-helpers";
 import { executeOperation } from "./apollo";
 import { WiremockPluginConfig } from "./config";
 import { prettify } from "./helpers";
+import { DocumentNode } from "graphql";
 
 export async function createResponseFile(
-  document: Types.DocumentFile,
+  document: DocumentNode,
   config: WiremockPluginConfig,
   bodyFileName: string
 ): Promise<void> {  

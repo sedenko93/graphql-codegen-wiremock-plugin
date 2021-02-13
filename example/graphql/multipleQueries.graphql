@@ -8,6 +8,17 @@ query getContinent($code: ID!) {
   }
 }
 
+query getCountries {
+   countries {
+   	code
+     name
+     languages {
+       native
+     }
+     currency
+   }
+ }
+
 query getContinentsMultipleQueries($filter: ContinentFilterInput) {
   continents(filter: $filter) {
   	code
