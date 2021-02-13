@@ -1,0 +1,19 @@
+{
+  "request": {
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.variables",
+          "equalToJson": "{\"filter\":{\"code\":{\"eq\":\"EU\"}}}"
+        }
+      },
+      {
+        "matchesJsonPath": {
+          "expression": "$.operationName",
+          "equalTo": "getContinents"
+        }
+      }
+    ]
+  },
+  "response": { "bodyFileName": "get-continents.json" }
+}

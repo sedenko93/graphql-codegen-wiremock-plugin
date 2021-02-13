@@ -1,81 +1,52 @@
-import { WiremockStubGeneratorConfig, GraphQLOperationConfig } from "./config";
-import { DefinitionNode, DocumentNode, OperationDefinitionNode } from "graphql";
+import {
+  WiremockBodyPattern,
+  WiremockConfig,
+  GraphQLOperationConfig,
+  WiremockPluginConfig,
+} from "./config";
+import { merge } from "lodash";
 
-const isOperationDefinition = (def: DefinitionNode) =>
-  def.kind === "OperationDefinition";
+export function getRequestMapping(
+  config: WiremockPluginConfig,
+  bodyFileName: string
+): WiremockConfig {
+  return merge({}, config.wiremock, {
+    request: {
+      bodyPatterns: getBodyPatterns(config.operation, config.wiremock),
+    },
+    response: {
+      bodyFileName: getBodyFileName(config.request.outputPath, bodyFileName),
+    },
+  });
+}
 
-export const getRequestMapping = (
-  config: WiremockStubGeneratorConfig,
-  document: DocumentNode
-) => ({
-  request: createRequestMapping(config, document),
-  response: createResponseMapping(config, document),
-});
+function getBodyFileName(outputPath: string, bodyFileName: string): string {
+  return `${outputPath.split("__files")?.pop()}/${bodyFileName}`.substring(1);
+}
 
-export const createRequestMapping = (
-  config: WiremockStubGeneratorConfig,
-  document: DocumentNode
-) => {
-  const operation = <OperationDefinitionNode>(
-    document.definitions.find(isOperationDefinition)
-  );
-
-  return {
-    ...config.wiremock.request,
-    bodyPatterns: getBodyPatterns(operation, config?.operation.variables),
+function getBodyPatterns(
+  operation: GraphQLOperationConfig,
+  wiremock: WiremockConfig
+): WiremockBodyPattern[] {
+  const operationNameBodyPattern = {
+    matchesJsonPath: {
+      expression: "$.operationName",
+      equalTo: `${operation.name}`,
+    },
   };
-};
 
-export const createResponseMapping = (
-  config: WiremockStubGeneratorConfig,
-  document: DocumentNode
-) => {
-  const operation = <OperationDefinitionNode>(
-    document.definitions.find(isOperationDefinition)
-  );
-  const bodyFileName =
-    config?.wiremock?.response?.bodyFileName ||
-    getBodyFileName(operation, config.operation);
-  return {
-    ...config.wiremock.response,
-    bodyFileName,
-  };
-};
+  if (wiremock?.request?.bodyPatterns)
+    return [...wiremock.request.bodyPatterns, operationNameBodyPattern];
 
-export const getBodyFileName = (
-  operation: OperationDefinitionNode,
-  config: GraphQLOperationConfig
-) => {
-  const keyValString = operation.variableDefinitions
-    ?.map(
-      ({ variable }) =>
-        `${variable.name.value}${
-          config.variables && config.variables[variable.name.value] ? `-${config.variables[variable.name.value]}` : ""
-        }`
-    )
-    .join("-");
-  return `${config.name}${keyValString ? `-${keyValString}` : ""}.json`;
-};
-
-export const getBodyPatterns = (
-  operation: OperationDefinitionNode,
-  variables: { [key: string]: any }
-) => {
-  return operation.variableDefinitions
-    ?.map(({ variable }) => {
-      if (!variables || variables[variable.name.value] === undefined) {
-        throw new Error(
-          `Could not provide query variable ${variable.name.value}, ${variable.name.value} is not given`
-        );
-      }
-
-      return {
-        matchesJsonPath: `$.variables[?(@.${variable.name.value} == '${
-          variables[variable.name.value]
-        }')]`,
-      };
-    })
-    .concat({
-      matchesJsonPath: `$[?(@.operationName == '${operation?.name?.value}')]`,
-    });
-};
+  return (operation.variables
+    ? [
+        <WiremockBodyPattern>{
+          matchesJsonPath: {
+            expression: "$.variables",
+            equalToJson: JSON.stringify(operation.variables),
+          },
+        },
+      ]
+    : []
+  ).concat(operationNameBodyPattern);
+}

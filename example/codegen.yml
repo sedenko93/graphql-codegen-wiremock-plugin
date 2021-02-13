@@ -1,0 +1,39 @@
+documents: "example/graphql/**.graphql"
+schema: "https://countries.trevorblades.com"
+overwrite: true
+generates:
+  example/mock/mappings/get-europe.json:    
+    plugins:
+      - dist/index.js:  
+          request:
+            url: "https://countries.trevorblades.com"
+            outputPath: "example/mock/__files"       
+          operation:
+            name: 'getContinent'
+            variables:
+              code: "EU"      
+  example/mock/mappings/get-continents.json:
+    plugins:
+      - dist/index.js:  
+          request:
+            url: "https://countries.trevorblades.com"
+            outputPath: "example/mock/__files"       
+          operation:
+            name: 'getContinents'
+            variables:
+              filter:
+                code:
+                  eq: "EU"
+  example/mock/mappings/get-continents-multiple-queries.json:
+    plugins:
+      - dist/index.js:  
+          request:
+            url: "https://countries.trevorblades.com"
+            outputPath: "example/mock/__files"       
+          operation:
+            name: 'getContinentsMultipleQueries'
+            variables:
+              filter:
+                code:
+                  eq: "EU"
+

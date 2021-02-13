@@ -1,31 +1,32 @@
 {
   "name": "graphql-codegen-wiremock-plugin",
-  "version": "1.0.0",
+  "version": "2.0.0-alpha.0",
   "main": "dist/index.js",
   "repository": "git@github.com:sedenko93/graphql-wiremock-stub-generator.git",
   "author": "Boyd Rehorst <boyd.rehorst@ziggo.nl>",
   "license": "MIT",
   "dependencies": {
-    "@apollo/client": "^3.2.0",
-    "fs-extra": "^9.0.1",
-    "graphql": "^15.3.0",
-    "graphql-tools": "^6.2.2",
-    "node-fetch": "2.6.1"
+    "@types/lodash": "^4.14.168",
+    "@types/prettier": "^2.1.6",
+    "apollo-cache-inmemory": "^1.6.6",
+    "apollo-client": "2.6.4",
+    "apollo-link-http": "^1.5.17",
+    "fs-extra": "9.0.1",
+    "graphql": "15.3.0",
+    "graphql-tools": "6.2.2",
+    "lodash": "^4.17.20",
+    "node-fetch": "2.6.1",
+    "prettier": "^2.2.1"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.17.8",
-    "@types/fs-extra": "^9.0.1",
-    "@types/node-fetch": "^2.5.7",
-    "nodemon": "^2.0.4",
-    "ts-node": "^9.0.0",
-    "typescript": "^4.0.2",
-    "wiremock-standalone": "^2.25.1-1"
+    "@graphql-codegen/cli": "1.17.8",
+    "@types/fs-extra": "9.0.1",
+    "@types/node-fetch": "2.5.7",
+    "typescript": "4.0.2"
   },
   "scripts": {
     "build": "tsc",
-    "start": "yarn build && yarn graphql-codegen",
-    "build:watch": "nodemon --exec yarn start",
-    "graphql-codegen": "graphql-codegen",
-    "wiremock": "wiremock --root-dir ./mock"
+    "graphql-codegen": "VERBOSE=1 DEBUG=1 graphql-codegen",
+    "start": "yarn build && yarn graphql-codegen --config example/codegen.yml"
   }
 }

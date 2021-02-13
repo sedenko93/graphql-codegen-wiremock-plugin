@@ -1,1 +1,0 @@
-{"request":{"method":"POST","urlPattern":"/","bodyPatterns":[{"matchesJsonPath":"$.variables[?(@.code == 'NL')]"},{"matchesJsonPath":"$[?(@.operationName == 'getLanguage')]"}]},"response":{"bodyFileName":"getLanguage-code-NL.json"}}

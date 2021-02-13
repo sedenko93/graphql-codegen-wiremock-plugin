@@ -1,4 +1,3 @@
-# Write your query or mutation here
 query getContinent($code: ID!) {
   continent(code: $code) {
   	code
