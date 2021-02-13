@@ -2,20 +2,18 @@ import { ApolloClient } from "apollo-client";
 import { HttpLink } from "apollo-link-http";
 import { InMemoryCache, NormalizedCacheObject } from "apollo-cache-inmemory";
 import fetch from "node-fetch";
-import { OperationDefinitionNode, print } from "graphql";
+import { print } from "graphql";
 import gql from "graphql-tag";
+import { Types } from "@graphql-codegen/plugin-helpers";
 import { WiremockPluginConfig } from "./config";
+import { getOperationAST } from "graphql";
 
-export const getClient = (config: WiremockPluginConfig): ApolloClient<NormalizedCacheObject> => {
-  
+export const getClient = (
+  config: WiremockPluginConfig
+): ApolloClient<NormalizedCacheObject> => {
   const cache = new InMemoryCache();
-
-  try {
-    cache.writeData({ data: { ...config?.operation?.variables } });
-  } catch(err) {
-    console.log({ err });
-  }
-  
+  // add variables to the cache in case @client / @export are being used in the query.
+  cache.writeData({ data: { ...config?.operation?.variables } });
 
   return new ApolloClient({
     link: new HttpLink({
@@ -38,11 +36,12 @@ export const getClient = (config: WiremockPluginConfig): ApolloClient<Normalized
 };
 
 export const executeOperation = async (
-  operation: OperationDefinitionNode,
+  document: Types.DocumentFile,
   config: WiremockPluginConfig
-): Promise<{ data: any, errors: any }> => {
+): Promise<{ data: any; errors: any }> => {
   const client = await getClient(config);
-  
+  const operation = getOperationAST(document.document, config.operation.name);
+
   if (operation.operation === "mutation") {
     const { data, errors } = await client.mutate({
       mutation: gql(print(operation)),
@@ -53,7 +52,7 @@ export const executeOperation = async (
   }
 
   const { data, errors } = await client.query({
-    query: gql(print(operation)),
+    query: document.document,
     variables: config.operation.variables,
     fetchPolicy: "no-cache",
   });

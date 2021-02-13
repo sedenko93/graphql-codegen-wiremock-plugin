@@ -25,6 +25,8 @@
     "typescript": "4.0.2"
   },
   "scripts": {
-    "build": "tsc"    
+    "build": "tsc",
+    "graphql-codegen": "VERBOSE=1 DEBUG=1 graphql-codegen",
+    "start": "yarn build && yarn graphql-codegen --config example/codegen.yml"  
   }
 }

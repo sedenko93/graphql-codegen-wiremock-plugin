@@ -21,7 +21,7 @@ export function getRequestMapping(
 }
 
 function getBodyFileName(outputPath: string, bodyFileName: string): string {
-  return `${outputPath.split("__files")?.pop().substring(1)}/${bodyFileName}`;
+  return `${outputPath.split("__files")?.pop()}/${bodyFileName}`.substring(1);
 }
 
 function getBodyPatterns(

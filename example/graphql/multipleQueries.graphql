@@ -1,0 +1,23 @@
+query getContinent($code: ID!) {
+  continent(code: $code) {
+  	code
+    name
+    countries {
+      emoji
+    }
+  }
+}
+
+query getContinentsMultipleQueries($filter: ContinentFilterInput) {
+  continents(filter: $filter) {
+  	code
+    name
+    countries {
+      ...countryCode
+    }
+  }
+}
+
+fragment countryCode on Country {
+  code
+}

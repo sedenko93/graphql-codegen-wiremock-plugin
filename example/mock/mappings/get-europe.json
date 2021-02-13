@@ -1,1 +1,19 @@
-{"request":{"method":"POST","urlPattern":"/test/","bodyPatterns":[{"matchesJsonPath":{"expression":"$.variables","equalToJson":"\"EU\""}},{"matchesJsonPath":"$[?(@.operationName == 'getContinent')]"}]},"response":{"status":200,"bodyFileName":"/test/getContinent-code-EU.json"}}
+{
+  "request": {
+    "bodyPatterns": [
+      {
+        "matchesJsonPath": {
+          "expression": "$.variables",
+          "equalToJson": "{\"code\":\"EU\"}"
+        }
+      },
+      {
+        "matchesJsonPath": {
+          "expression": "$.operationName",
+          "equalTo": "getContinent"
+        }
+      }
+    ]
+  },
+  "response": { "bodyFileName": "get-europe.json" }
+}

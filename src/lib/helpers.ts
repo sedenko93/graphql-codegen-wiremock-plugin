@@ -1,18 +1,14 @@
-import { getOperationAST, OperationDefinitionNode } from "graphql";
+import { getOperationAST } from "graphql";
 import { Types } from "@graphql-codegen/plugin-helpers";
 import prettier from "prettier";
 
-export const getOperationByName = (
+export const getDocumentByName = (
   documents: Types.DocumentFile[],
   operationName: string
-): OperationDefinitionNode | null => {
-  const document = documents.find(
+): Types.DocumentFile => {
+  return documents.find(
     ({ document }) => document && getOperationAST(document, operationName)
   );
-
-  if (!document || !document.document) return null;
-
-  return getOperationAST(document.document, operationName) || null;
 };
 
 export const prettify = (source: string): string =>

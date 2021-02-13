@@ -4,7 +4,7 @@ import {
   PluginValidateFn,
 } from "@graphql-codegen/plugin-helpers";
 import { WiremockPluginConfig } from "./config";
-import { getOperationByName, prettify, getOutputFileName } from "./helpers";
+import { getDocumentByName, prettify, getOutputFileName } from "./helpers";
 import { getRequestMapping } from "./wiremock";
 import { createResponseFile } from "./response";
 import { GraphQLSchema } from "graphql";
@@ -15,15 +15,15 @@ export const plugin: PluginFunction = async (
   config: WiremockPluginConfig,
   info: { outputFile: string }
 ): Promise<string> => {
-  const operation = getOperationByName(documents, config.operation.name);
+  const document = getDocumentByName(documents, config.operation.name);
   const bodyFileName = getOutputFileName(info.outputFile);
 
-  if (!operation)
-    throw new Error("It seems no GraphQL operations could be found");
+  if (!document)
+    throw new Error("It seems no GraphQL document could be found");
 
   const requestMapping = getRequestMapping(config, bodyFileName);
   await createResponseFile(
-    operation,
+    document,
     config,
     requestMapping.response.bodyFileName
   );

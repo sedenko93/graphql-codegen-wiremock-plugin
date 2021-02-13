@@ -10,10 +10,10 @@
       {
         "matchesJsonPath": {
           "expression": "$.operationName",
-          "equalTo": "getContinents"
+          "equalTo": "getContinentsMultipleQueries"
         }
       }
     ]
   },
-  "response": { "bodyFileName": "get-continents.json" }
+  "response": { "bodyFileName": "get-continents-multiple-queries.json" }
 }
