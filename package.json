@@ -14,7 +14,7 @@
     "fs-extra": "9.0.1",
     "graphql": "15.3.0",
     "graphql-tools": "6.2.2",
-    "lodash": "^4.17.20",
+    "lodash": "^4.17.21",
     "node-fetch": "2.6.1",
     "prettier": "^2.2.1",
     "@graphql-codegen/visitor-plugin-common": "^1.21.2"
