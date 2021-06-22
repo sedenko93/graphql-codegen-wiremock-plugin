@@ -7,7 +7,7 @@ import { WiremockPluginConfig } from "./config";
 import { getDocumentByName, prettify, getOutputFileName } from "./helpers";
 import { getRequestMapping } from "./wiremock";
 import { createResponseFile } from "./response";
-import { GraphQLSchema } from "graphql";
+import { concatAST, GraphQLSchema } from "graphql";
 
 export const plugin: PluginFunction = async (
   schema: GraphQLSchema,
@@ -15,11 +15,14 @@ export const plugin: PluginFunction = async (
   config: WiremockPluginConfig,
   info: { outputFile: string }
 ): Promise<string> => {
-  const document = getDocumentByName(documents, config.operation.name);
+  const document = getDocumentByName(
+    schema,
+    concatAST(documents.map((v) => v.document)),
+    config.operation.name
+  );
   const bodyFileName = getOutputFileName(info.outputFile);
 
-  if (!document)
-    throw new Error("It seems no GraphQL document could be found");
+  if (!document) throw new Error("It seems no GraphQL document could be found");
 
   const requestMapping = getRequestMapping(config, bodyFileName);
   await createResponseFile(

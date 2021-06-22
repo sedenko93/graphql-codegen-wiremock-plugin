@@ -1,9 +1,5 @@
-query getContinent($code: ID!) {
+query getContinentByCode($code: ID!) {
   continent(code: $code) {
-  	code
-    name
-    countries {
-      emoji
-    }
+  	...continentFields
   }
 }

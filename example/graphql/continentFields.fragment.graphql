@@ -1,0 +1,7 @@
+fragment continentFields on Continent {
+    code
+    name
+    countries {
+      ...countryFields
+    }
+}

@@ -9,7 +9,7 @@ generates:
             url: "https://countries.trevorblades.com"
             outputPath: "example/mock/__files"       
           operation:
-            name: 'getContinent'
+            name: 'getContinentByCode'
             variables:
               code: "EU"      
   example/mock/mappings/get-continents.json:

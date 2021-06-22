@@ -1,0 +1,7 @@
+fragment continents on Continent {
+    code
+    name
+    countries {
+      emoji
+    }
+}

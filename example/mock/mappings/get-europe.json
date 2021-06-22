@@ -10,7 +10,7 @@
       {
         "matchesJsonPath": {
           "expression": "$.operationName",
-          "equalTo": "getContinent"
+          "equalTo": "getContinentByCode"
         }
       }
     ]

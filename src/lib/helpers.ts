@@ -1,23 +1,39 @@
-import { DefinitionNode, DocumentNode, getOperationAST, isExecutableDefinitionNode } from "graphql";
-import { Types } from "@graphql-codegen/plugin-helpers";
+import { DocumentNode, FragmentDefinitionNode, GraphQLSchema, Kind, OperationDefinitionNode, visit } from "graphql";
 import prettier from "prettier";
+import { ClientSideBaseVisitor, LoadedFragment } from "@graphql-codegen/visitor-plugin-common";
 
 export const getDocumentByName = (
-  documents: Types.DocumentFile[],
+  schema: GraphQLSchema,
+  documents: DocumentNode,
   operationName: string
 ): DocumentNode => {
-  const documentFile = documents.find(
-    ({ document }) => document && getOperationAST(document, operationName)
+  const allFragments: LoadedFragment[] = [
+    ...(documents.definitions.filter(
+      (d) => d.kind === Kind.FRAGMENT_DEFINITION
+    ) as FragmentDefinitionNode[]).map((fragmentDef) => ({
+      node: fragmentDef,
+      name: fragmentDef.name.value,
+      onType: fragmentDef.typeCondition.name.value,
+      isExternal: false,
+    })),
+  ];
+
+  const visitor = new ClientSideBaseVisitor(
+    schema,
+    allFragments,
+    { noGraphQLTag: true, noExport: true, documentVariableSuffix: "" },
+    {}
   );
 
-  // support files with multipe queries
-  return {
-    kind: documentFile.document.kind,
-    definitions: documentFile.document.definitions.filter(
-      (definition: DefinitionNode): boolean => 
-        isExecutableDefinitionNode(definition) && (definition.kind === 'FragmentDefinition' || definition.name.value === operationName)      
-    )
-  };
+  return visit(documents, { leave: visitor })
+    .definitions.filter((item) => typeof item === "string")
+    .map((operation) => JSON.parse(operation.match(/\{.+\}/)[0]))
+    .filter((operation: DocumentNode) =>
+      operation.definitions.find(
+        (operation: OperationDefinitionNode) =>
+          operation.name.value === operationName
+      )
+    ).shift();  
 };
 
 export const prettify = (source: string): string =>
